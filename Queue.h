@@ -82,6 +82,26 @@ public:
 
 	}
 
+	T getFront()
+	{
+		return head->mData;
+	}
+
+	void removeFromFront()
+	{
+		current = head;
+		head = current->mNext;
+		current = NULL;
+	}
+
+	bool isEmpty()
+	{
+		if (head == NULL)
+			return true;
+		else
+			return false;
+	}
+
 	/*printQueue - prints the queue to standard out
 	PRE: T has well defined bahaviour for '<<'
 	POST: */

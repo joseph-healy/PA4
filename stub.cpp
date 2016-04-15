@@ -8,7 +8,7 @@ using namespace std;
 int main()
 {
 	BST<int> tree;
-
+	
 	cout << "Inserting:  5\n";
 	tree.insert(5);
 

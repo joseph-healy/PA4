@@ -3,6 +3,7 @@
 #define _BST_H
 
 #include <iostream>
+#include "Queue.h"
 
 using namespace std;
 
@@ -60,6 +61,7 @@ private:
 	int countLeaves(Node<T> *root); // recursive definition to count the leaves of a tree//subtree
 	int countHeight(Node<T> *root); //recursively count the height of a tree or subtree
 	int max(int x, int y);
+	void bfSearch(Node<T> node); // breadth-first search of a binary search tree
 	void destroySubtree(Node<T> *node);
 	void displayInOrder(Node<T> *node);
 	void displayPreOrder(Node<T> *node);
@@ -118,9 +120,44 @@ BST<T>::~BST()
 template <typename T>
 bool BST<T>::bfs(T searchKey)
 {
+	Queue<Node<T>*>	q;
+	q.addItem(mRootNode);
+	cout << mRootNode->mData << ", ";
+	while (!(q.isEmpty()))
+	{
+		Node<T>* temp = q.getFront();
+		if (temp->mLeft != NULL)
+		{
+			q.addItem(temp->mLeft);
+			if (temp->mLeft->mData == searchKey)
+			{
+				cout << temp->mLeft->mData << endl;
+				return true;
+			}
+			else
+			{
+				cout << temp->mLeft->mData << ", ";
+			}
+		}
 
+		if (temp->mRight != NULL)
+		{
+			q.addItem(temp->mRight);
+			if (temp->mRight->mData == searchKey)
+			{
+				cout << temp->mRight->mData << endl;
+				return true;
+			}
+			else
+			{
+				cout << temp->mRight->mData << ", ";
+			}
+		}
+		q.removeFromFront();
+	}
 	return false;
 }
+
 
 
 template<typename T>
