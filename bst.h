@@ -61,7 +61,7 @@ private:
 	int countLeaves(Node<T> *root); // recursive definition to count the leaves of a tree//subtree
 	int countHeight(Node<T> *root); //recursively count the height of a tree or subtree
 	int max(int x, int y);
-	void bfSearch(Node<T> node); // breadth-first search of a binary search tree
+	bool dfSearch(Node<T> *node, T &searchkey);
 	void destroySubtree(Node<T> *node);
 	void displayInOrder(Node<T> *node);
 	void displayPreOrder(Node<T> *node);
@@ -91,14 +91,20 @@ public:
 	void showTree();
 };
 
-
+/*      Pre:  None
+*     Post:  This object is initialized using default values
+*  Purpose:  To intialize BST object
+*************************************************************************/
 template <typename T>
 BST<T>::BST()
 {
 	mRootNode = NULL;
 }
 
-
+/*      Pre:  None
+*     Post:  This object is initialized using specified values
+*  Purpose:  To intialize BST object
+*************************************************************************/
 template <typename T>
 BST<T>::BST(T data, Node<T> *left = NULL, Node<T> *right = NULL)
 {
@@ -109,14 +115,20 @@ BST<T>::BST(T data, Node<T> *left = NULL, Node<T> *right = NULL)
 		mRootNode = newNode;
 }
 
-
+/*      Pre:  None
+*     Post:  This object is destructed, all subtrees and pointers deleted
+*  Purpose:  To delete the object without causing memory problems
+*************************************************************************/
 template <typename T>
 BST<T>::~BST()
 {
 	destroySubtree(mRootNode);
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  a Breadth first traversal of the tree is printed to standard out. Returns true if searchkey is found, otherwise false
+*  Purpose:  To perform a Breadth first search
+*************************************************************************/
 template <typename T>
 bool BST<T>::bfs(T searchKey)
 {
@@ -159,7 +171,10 @@ bool BST<T>::bfs(T searchKey)
 }
 
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  The number of nodes in the tree are returned
+*  Purpose:  To count the nodes in the tree
+*************************************************************************/
 template<typename T>
 int BST<T>::countNodes(Node<T>* root)
 {
@@ -171,6 +186,10 @@ int BST<T>::countNodes(Node<T>* root)
 		return 1 + countNodes(root->mLeft) + countNodes(root->mRight);
 }
 
+/*      Pre:  An initialized binary search tree
+*     Post:  The number of leaves in the tree are returned
+*  Purpose:  To count the leaves in the tree
+*************************************************************************/
 template<typename T>
 int BST<T>::countLeaves(Node<T>* root)
 {
@@ -182,6 +201,10 @@ int BST<T>::countLeaves(Node<T>* root)
 		return countLeaves(root->mLeft) + countLeaves(root->mRight);
 }
 
+/*      Pre:  An initialized binary search tree
+*     Post:  The height of the tree is returned (0 indexed)
+*  Purpose:  Calculating the height of a binary search tree
+*************************************************************************/
 template<typename T>
 int BST<T>::countHeight(Node<T>* root)
 {
@@ -191,6 +214,10 @@ int BST<T>::countHeight(Node<T>* root)
 		return (max(countHeight(root->mLeft), countHeight(root->mRight)) + 1);
 }
 
+/*      Pre:  two valid integers
+*     Post:  the maximum of the two values is returned to the user
+*  Purpose:  find the maximum value between two ints, to be used by the countHeight function 
+*************************************************************************/
 template<typename T>
 int BST<T>::max(int x, int y)
 {
@@ -202,6 +229,10 @@ int BST<T>::max(int x, int y)
 		return y;
 }
 
+/*      Pre:  An initialized binary search tree
+*     Post:  The subtree of node is deleted, all pointers are deleted
+*  Purpose:  To delete a subtree, or even a whole tree if you want
+*************************************************************************/
 template <typename T>
 void BST<T>::destroySubtree(Node<T> *node)
 {
@@ -215,14 +246,44 @@ void BST<T>::destroySubtree(Node<T> *node)
 	delete node;
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  a Depth first traversal of the tree is printed to standard out. Returns true if searchkey is found, otherwise false
+*  Purpose:  To perform a Depth first search, wrapper function for the recursive dfSearch function
+*************************************************************************/
 template <typename T>
 bool BST<T>::dfs(T searchKey)
 {
-	return false;
+	return dfSearch(mRootNode, searchKey);;
 }
 
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  a Depth first traversal of the tree is printed to standard out. Returns true if searchkey is found, otherwise false
+*  Purpose:  To perform a Depth first search, to be used by the dfs function
+*************************************************************************/
+template <typename T>
+bool  BST<T>::dfSearch(Node<T>* node, T &searchkey)
+{
+	if (node == NULL)
+		return false;
+	if (node->mData == searchkey)
+	{
+		cout << node->mData << endl;
+		return true;
+	}
+	else
+	{
+		cout << node->mData << ",";
+		if(dfSearch(node->mLeft, searchkey)) 
+			return true;
+		if(dfSearch(node->mRight, searchkey)) 
+			return true;
+	}
+}
 
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the tree is displayed on the console using an in-order traversal
+*  Purpose:  To show the tree to the user in in-order notation
+*************************************************************************/
 template <typename T>
 void BST<T>::displayInOrder(Node<T> *node)
 {
@@ -234,7 +295,10 @@ void BST<T>::displayInOrder(Node<T> *node)
 	}
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the tree is displayed on the console using a pre-order traversal
+*  Purpose:  To show the tree to the user in pre-order notation
+*************************************************************************/
 template <typename T>
 void BST<T>::displayPreOrder(Node<T> *node)
 {
@@ -246,7 +310,10 @@ void BST<T>::displayPreOrder(Node<T> *node)
 	}
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the tree is displayed on the console using a post-order traversal
+*  Purpose:  To show the tree to the user in post-order notation
+*************************************************************************/
 template <typename T>
 void BST<T>::displayPostOrder(Node<T> *node)
 {
@@ -258,7 +325,10 @@ void BST<T>::displayPostOrder(Node<T> *node)
 	}
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the tree is displayed in heirarchal order
+*  Purpose:  To show the tree to the user in heirarchal order
+*************************************************************************/
 template <typename T>
 void BST<T>::displayTree(Node<T> *node, int tab)
 {
@@ -277,21 +347,30 @@ void BST<T>::displayTree(Node<T> *node, int tab)
 	}
 }
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  The height of the tree is returned (0 indexed)
+*  Purpose:  Calculating the height of a binary search tree, wrapper for the countHeight function
+*************************************************************************/
 template <typename T>
 int BST<T>::getHeight()
 {
 	return countHeight(mRootNode);
 }
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  A node containinf data is inserted into appropriate spot in the tree
+*  Purpose:  to insert a value into the tree
+*************************************************************************/
 template <typename T>
 void BST<T>::insert(T data)
 {
 	insert(mRootNode, data);
 }
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  A node containinf data is inserted into appropriate spot in the tree
+*  Purpose:  to insert a value into the tree
+*************************************************************************/
 template <typename T>
 void BST<T>::insert(Node<T> *&node, const T &data)
 {
@@ -315,14 +394,20 @@ void BST<T>::insert(Node<T> *&node, const T &data)
 		insert(node->mRight, data);
 }
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  if thre tree is empty returns true, otherwise false
+*  Purpose:  to find out if a tree is empty
+*************************************************************************/
 template <typename T>
 bool BST<T>::isEmpty()
 {
 	return (mRootNode == NULL);
 }
 
-
+/*      Pre:  An initialized binary search tree, a valid searchkey. <T> must have well defined behaviour for <<, > and ==
+*     Post:  if thre tree is empty returns true, otherwise false
+*  Purpose:  to find out if a tree is empty
+*************************************************************************/
 template <typename T>
 bool BST<T>::isExists(T searchKey)
 {
@@ -340,13 +425,20 @@ bool BST<T>::isExists(T searchKey)
 	return false;
 }
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  The number of leaves in the tree are returned
+*  Purpose:  To count the leaves in the tree
+*************************************************************************/
 template <typename T>
 int BST<T>::leavesCount()
 {
 	return countLeaves(mRootNode);
 }
 
+/*      Pre:  An initialized binary search tree
+*     Post:  the passed in node is deleted
+*  Purpose:  To delete a node from the tree
+*************************************************************************/
 template <typename T>
 void BST<T>::makeDeletion(Node<T> *&node)
 {
@@ -391,14 +483,20 @@ void BST<T>::makeDeletion(Node<T> *&node)
 	delete nodeToDelete;
 }
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  The number of leaves in the tree are returned
+*  Purpose:  To count the nodes in the tree
+*************************************************************************/
 template <typename T>
 int BST<T>::nodesCount()
 {
 	return countNodes(mRootNode);
 }
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  The number of leaves in the tree are returned
+*  Purpose:  To count the nodes in the tree
+*************************************************************************/
 template <typename T>
 void BST<T>::printPath(T searchKey)
 {
@@ -427,6 +525,10 @@ void BST<T>::printPath(T searchKey)
 	cout << temp->mData;
 }
 
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the path to the searchkey is printed to standard out
+*  Purpose:  To show the path to a particular node in the tree
+*************************************************************************/
 template <typename T>
 void BST<T>::remove(Node<T> *&node, const T &searchKey)
 {
@@ -441,35 +543,50 @@ void BST<T>::remove(Node<T> *&node, const T &searchKey)
 		makeDeletion(node);
 }
 
-
+/*      Pre:  An initialized binary search tree
+*     Post:  the passed in node is deleted
+*  Purpose:  To delete a node from the tree
+*************************************************************************/
 template <typename T>
 void BST<T>::remove(T searchKey)
 {
 	remove(mRootNode, searchKey);
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the tree is displayed on the console using an in-order traversal
+*  Purpose:  To show the tree to the user in in-order notation
+*************************************************************************/
 template <typename T>
 void BST<T>::showInOrder()
 {
 	displayInOrder(mRootNode);
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the tree is displayed on the console using a pre-order traversal
+*  Purpose:  To show the tree to the user in pre-order notation
+*************************************************************************/
 template <typename T>
 void BST<T>::showPreOrder()
 {
 	displayPreOrder(mRootNode);
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the tree is displayed on the console using a post-order traversal
+*  Purpose:  To show the tree to the user in pre-order notation
+*************************************************************************/
 template <typename T>
 void BST<T>::showPostOrder()
 {
 	displayPostOrder(mRootNode);
 }
 
-
+/*      Pre:  An initialized binary search tree, and a valid searchkey. <T> must have well defined behaviour for << and ==
+*     Post:  the tree is displayed in heirarchal order
+*  Purpose:  To show the tree to the user in heirarchal order
+*************************************************************************/
 template <typename T>
 void BST<T>::showTree()
 {
