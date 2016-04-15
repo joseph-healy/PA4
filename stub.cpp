@@ -1,5 +1,6 @@
 #include <iostream>
 #include "bst.h"
+#include "Stack.h"
 
 using namespace std;
 
@@ -65,7 +66,7 @@ int main()
 
 	cout << "\n\nBFS:  9\n";
 	cout << (tree.bfs(9) ? "Found" : "Not Found") << endl;
-
+	
 	system("pause");
 
 	return 0;
