@@ -1,6 +1,7 @@
 #include <iostream>
 #include "bst.h"
 #include "Stack.h"
+#include "Queue.h"
 
 using namespace std;
 
